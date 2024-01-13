@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Header from "./components/Header";
+import TopPage from "./pages/TopPage";
+import UserDetail from "./pages/UserDetail";
+import UserList from "./pages/UserList";
+import UserRepositoryImpl from "./repositories/UserRepositoryImpl";
+import UserService from "./services/UserService";
 
-function App() {
+const App: React.FC = () => {
+  const userRepository = new UserRepositoryImpl();
+  const userService = new UserService(userRepository);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Header />
+      <Routes>
+        <Route path="/" element={<TopPage />} />
+        <Route path="/users" element={<UserList userService={userService} />} />
+        <Route
+          path="/users/:id"
+          element={<UserDetail userService={userService} />}
+        />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
